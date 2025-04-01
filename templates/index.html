@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diabetes Progression Prediction</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Predict Diabetes Progression</h1>
+    <form action="/predict" method="post">
+        <label for="age">Age (normalized):</label>
+        <input type="number" step="any" id="age" name="age" required>
+        
+        <label for="sex">Sex (0 or 1):</label>
+        <input type="number" step="any" id="sex" name="sex" required>
+        
+        <label for="bmi">BMI (normalized):</label>
+        <input type="number" step="any" id="bmi" name="bmi" required>
+        
+        <label for="bp">Blood Pressure (normalized):</label>
+        <input type="number" step="any" id="bp" name="bp" required>
+        
+        <label for="s1">Total Serum Cholesterol (normalized):</label>
+        <input type="number" step="any" id="s1" name="s1" required>
+        
+        <button type="submit">Predict</button>
+    </form>
+
+    <div class="bmi-calculator">
+        <h3>BMI Calculator</h3>
+        <label for="weight">Weight (kg):</label>
+        <input type="number" step="any" id="weight" required>
+        <label for="height">Height (m):</label>
+        <input type="number" step="any" id="height" required>
+        <button type="button" onclick="calculateBMI()">Calculate BMI</button>
+        <div id="bmi-result"></div>
+    </div>
+
+    <p class="note">Note: Model uses 5 key features out of 10. Normalized values typically between -0.1 and 0.1. Use the BMI calculator to get a raw BMI value, which should be normalized for accurate prediction.</p>
+
+    <script>
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            if (weight > 0 && height > 0) {
+                const bmi = weight / (height * height);
+                // Normalize BMI (assuming typical range 15-40, mapping to -0.1 to 0.1)
+                const normalizedBMI = ((bmi - 15) / (40 - 15)) * 0.2 - 0.1;
+                document.getElementById('bmi-result').innerHTML = 
+                    `Raw BMI: ${bmi.toFixed(2)}<br>Normalized BMI: ${normalizedBMI.toFixed(4)}<br>(Copy normalized value to BMI field above)`;
+            } else {
+                document.getElementById('bmi-result').innerHTML = 'Please enter valid weight and height';
+            }
+        }
+    </script>
+</body>
+</html>
